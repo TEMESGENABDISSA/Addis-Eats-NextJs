@@ -12,6 +12,14 @@ export const dishes: Dish[] = [
   { id: "firfir", name: "Firfir", category: "Vegetarian", price: 160 },
 ];
 
-export function getDish(id: string): Dish | undefined {
+// Simulate async data fetch (in a real app, this would query a database)
+export async function getDishes(): Promise<Dish[]> {
+  // Simulate database delay
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  return dishes;
+}
+
+export async function getDish(id: string): Promise<Dish | undefined> {
+  await new Promise((resolve) => setTimeout(resolve, 50));
   return dishes.find((dish) => dish.id === id);
 }
