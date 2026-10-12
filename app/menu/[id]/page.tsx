@@ -1,10 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDish } from "../dishes";
+import { dishes, getDish } from "../dishes";
 
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+// Pre-build all dish pages at build time
+// Every dish is known at build time
+export async function generateStaticParams() {
+  return dishes.map((dish) => ({ id: dish.id }));
+}
 
 export default async function DishPage({ params }: Props) {
   const { id } = await params;
@@ -13,13 +19,13 @@ export default async function DishPage({ params }: Props) {
   if (!dish) notFound();
 
   return (
-    <main className="p-8">
+    <div>
       <h1 className="text-3xl font-bold">{dish.name}</h1>
       <p className="mt-2">Category: {dish.category}</p>
       <p>Price: {dish.price} birr</p>
       <Link href="/menu" className="mt-4 inline-block underline">
         ← Back to menu
       </Link>
-    </main>
+    </div>
   );
 }
