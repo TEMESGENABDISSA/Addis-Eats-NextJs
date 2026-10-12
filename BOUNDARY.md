@@ -14,7 +14,6 @@ This document outlines which components run on the server vs. the client, and th
 | `app/menu/layout.tsx` | Server | Menu layout shell, no interactivity |
 | `app/menu/DishList.tsx` | Server | Pure markup from data, ships no JavaScript |
 | `app/menu/[id]/page.tsx` | Server | Fetches dish data, no interactivity |
-| `app/checkout/page.tsx` | Server | Placeholder, currently static |
 | `app/components/Footer.tsx` | Server | Static footer, no interactivity |
 | `app/menu/dishes.tsx` | Server | Data module, async functions for server fetching |
 | `app/menu/loading.tsx` | Server | Loading state for menu segment |
@@ -27,6 +26,7 @@ This document outlines which components run on the server vs. the client, and th
 | `app/providers.tsx` | Client | Context provider requires state (cart) |
 | `app/components/Header.tsx` | Client | Uses cart context to display cart count |
 | `app/cart/page.jsx` | Client | Uses cart context, has onClick handlers |
+| `app/checkout/page.tsx` | Client | Uses server action and useActionState, has form interactivity |
 | `app/menu/FilterShell.tsx` | Client | Holds selected category state, onClick handlers |
 | `app/menu/AddToCartButton.tsx` | Client | onClick handler, calls cart context |
 | `app/menu/error.tsx` | Client | Has onClick handler for reset button |
@@ -53,6 +53,11 @@ This document outlines which components run on the server vs. the client, and th
 - **Rationale**: Header needs cart count which is in context
 - **Benefit**: Smallest leaf that needs interactivity
 
+### 5. Checkout Page → Server Action
+- **Pattern**: Client component calls server action via form
+- **Rationale**: Checkout needs interactivity (form, pending state, error handling) and writes data
+- **Benefit**: Form works without JavaScript (progressive enhancement), server action handles validation and writes
+
 ## Key Principles Applied
 
 1. **Server by default** - Every component starts as server, only add "use client" when genuinely needed
@@ -69,7 +74,7 @@ If all components were client:
 - Larger JavaScript payload
 
 ### After (Current Implementation)
-- Only 6 client components (small interactive leaves)
+- Only 7 client components (small interactive leaves)
 - Most markup rendered as HTML on server
 - Minimal JavaScript shipped (~2-5 kB for interactive parts)
 - Faster initial page load
@@ -81,6 +86,15 @@ If all components were client:
 - It has an onClick handler for the reset button
 - Error boundaries in Next.js app router require "use client"
 - This is the correct placement - error catching happens at segment level
+
+## Server Actions Note
+
+`app/actions.ts` contains server actions marked with `"use server"`:
+- Server actions are the exception to the "functions cannot cross boundary" rule
+- They run on the server but can be called from client components
+- Used for writes (placeOrder, cancelOrder) from your own UI
+- Security checks must be inside the action (session, ownership validation)
+- Forms using server actions work before JavaScript loads (progressive enhancement)
 
 ## Future Considerations
 
