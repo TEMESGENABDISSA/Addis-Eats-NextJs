@@ -1,21 +1,39 @@
+"use client";
+
+import { useState } from "react";
 import DishList from "./DishList";
 import FilterShell from "./FilterShell";
-import { getDishes } from "./dishes";
+import SearchBox from "./SearchBox";
+import type { Dish } from "./dishes";
 
-// ISR: Regenerate at most once per hour
-// Dishes change occasionally; speed matters most
-export const revalidate = 3600;
+type PaginatedDishesResponse = {
+  dishes: Dish[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+};
 
-// Async server component - fetches data on the server
-// No useState, useEffect, or loading flags needed
-export default async function MenuPage() {
-  const dishes = await getDishes();
+export default function MenuPage() {
+  const [searchResponse, setSearchResponse] = useState<PaginatedDishesResponse | null>(null);
+  const [allDishes, setAllDishes] = useState<Dish[]>([]);
+
+  const handleFilteredDishes = (response: PaginatedDishesResponse | null) => {
+    setSearchResponse(response);
+  };
+
+  const handleAllDishes = (dishes: Dish[]) => {
+    setAllDishes(dishes);
+  };
+
+  const dishesToDisplay = searchResponse ? searchResponse.dishes : allDishes;
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">Our menu</h1>
-      <FilterShell dishes={dishes}>
-        <DishList dishes={dishes} />
+      <h1 className="text-3xl font-bold mb-6">Our menu</h1>
+      <SearchBox onFilteredDishes={handleFilteredDishes} allDishes={allDishes} />
+      <FilterShell dishes={dishesToDisplay} onAllDishes={handleAllDishes}>
+        <DishList dishes={dishesToDisplay} />
       </FilterShell>
     </div>
   );

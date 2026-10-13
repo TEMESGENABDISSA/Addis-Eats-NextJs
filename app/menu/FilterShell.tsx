@@ -1,16 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Dish } from "./dishes";
 
 type FilterShellProps = {
   children: React.ReactNode;
   dishes: Dish[];
+  onAllDishes?: (dishes: Dish[]) => void;
 };
 
-export default function FilterShell({ children, dishes }: FilterShellProps) {
+export default function FilterShell({ children, dishes, onAllDishes }: FilterShellProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const categories = ["All", ...new Set(dishes.map((dish) => dish.category))];
+
+  // Notify parent of all dishes when dishes prop changes
+  useEffect(() => {
+    if (onAllDishes) {
+      onAllDishes(dishes);
+    }
+  }, [dishes, onAllDishes]);
 
   return (
     <div>

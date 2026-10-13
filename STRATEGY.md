@@ -7,10 +7,11 @@ This document outlines the rendering strategy for each route in the Addis Eats N
 | Route | Strategy | Justification |
 |-------|----------|---------------|
 | `/` | Static (SSG) | Landing page with static content, no dynamic data, no user-specific content |
-| `/menu` | ISR (revalidate=3600) | Dishes data changes occasionally (few times a day), benefits from caching but needs periodic updates |
+| `/menu` | Dynamic (Client component) | Converted to client component for search functionality with SWR |
 | `/menu/[id]` | Static via generateStaticParams | All dish IDs are known at build time, dishes don't change frequently, can be pre-built |
 | `/cart` | Static route, Client component | Route is static (no server data), but component is client for cart state management |
 | `/checkout` | Dynamic (force-dynamic) | Will read session cookies and user-specific data, server action writes data |
+| `/orders/[id]` | Server component with SWR polling | Server renders initial order data, SWR polls every 5 seconds for status updates |
 
 ## Detailed Explanations
 
@@ -20,10 +21,10 @@ This document outlines the rendering strategy for each route in the Addis Eats N
 - **Build symbol**: ○ (static)
 
 ### `/menu` - Menu Page
-- **Strategy**: Incremental Static Regeneration (ISR)
-- **Why**: The menu displays dishes from a database. While dishes don't change constantly, they do change occasionally (new dishes added, prices updated, availability changes). Setting `revalidate=3600` (1 hour) means the page is cached but regenerated when requested after the cache expires. This balances performance with freshness.
-- **Build symbol**: ○ (static with ISR)
-- **Configuration**: `export const revalidate = 3600;`
+- **Strategy**: Client component with SWR
+- **Why**: The menu now includes search-as-you-type functionality with SWR. The search box uses a debounced key, null key when empty, and keepPreviousData to prevent flashing. Since this is triggered by user typing and needs race-condition safety, it must be client-side. The revalidate export is kept for potential future server-side rendering.
+- **Build symbol**: λ (dynamic - client component)
+- **Configuration**: `export const revalidate = 3600;` (kept for potential future use)
 
 ### `/menu/[id]` - Dish Detail Page
 - **Strategy**: Static via generateStaticParams
@@ -43,13 +44,20 @@ This document outlines the rendering strategy for each route in the Addis Eats N
 - **Build symbol**: ○ (static route with client component)
 - **Configuration**: `export const dynamic = "force-dynamic";` (for future session integration)
 
+### `/orders/[id]` - Order Status Page
+- **Strategy**: Server component with SWR polling
+- **Why**: The server component fetches the initial order data and passes it to the client component as `fallbackData`. This ensures the first paint has real data and is SEO-friendly. The client component then uses SWR to poll the order status every 5 seconds (`refreshInterval: 5000`). This combines server-side rendering for the initial load with client-side polling for live updates. The page is dynamic because order IDs are not known at build time.
+- **Build symbol**: λ (dynamic)
+- **Configuration**: Server component fetches order, SWR with `fallbackData` and `refreshInterval: 5000`
+
 ## API Routes
 
 | Route | Method | Strategy | Justification |
 |-------|--------|----------|---------------|
-| `/api/dishes` | GET | Dynamic | Reads dishes data, can be cached by browser but server fetches fresh data |
+| `/api/dishes` | GET | Dynamic | Reads dishes data, supports search query and pagination |
 | `/api/dishes/[id]` | GET | Dynamic | Fetches single dish, returns 404 if not found |
 | `/api/orders` | POST | Dynamic | Writes data (creates order), never cached |
+| `/api/orders/[id]` | GET | Dynamic | Fetches single order for polling, returns 404 if not found |
 
 ## Special Files
 
