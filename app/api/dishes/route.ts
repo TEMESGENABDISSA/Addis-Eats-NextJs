@@ -6,6 +6,7 @@ const PAGE_SIZE = 2;
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get("q");
+  const category = searchParams.get("category");
   const page = parseInt(searchParams.get("page") || "1");
 
   const dishes = await getDishes();
@@ -16,6 +17,12 @@ export async function GET(request: Request) {
       (dish) =>
         dish.name.toLowerCase().includes(query.toLowerCase()) ||
         dish.category.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+
+  if (category) {
+    filtered = filtered.filter((dish) =>
+      dish.category.toLowerCase() === category.toLowerCase()
     );
   }
 
