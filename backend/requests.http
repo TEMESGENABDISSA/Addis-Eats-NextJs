@@ -1,0 +1,76 @@
+@host = http://localhost:3001/api
+
+### Restaurants - List all
+GET {{host}}/restaurants
+
+### Restaurants - Filter by area
+GET {{host}}/restaurants?area=Bole
+
+### Restaurants - Get open only
+GET {{host}}/restaurants/open
+
+### Restaurants - Get one
+GET {{host}}/restaurants/1
+
+### Restaurants - Get non-existent (404)
+GET {{host}}/restaurants/99
+
+### Restaurants - Create valid
+POST {{host}}/restaurants
+Content-Type: application/json
+
+{
+  "name": "Sishu",
+  "area": "Kazanchis"
+}
+
+### Restaurants - Create with invalid area (400)
+POST {{host}}/restaurants
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "area": "Adama"
+}
+
+### Restaurants - Create with unknown field (stripped)
+POST {{host}}/restaurants
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "area": "Bole",
+  "hacked": true
+}
+
+### Dishes - List all
+GET {{host}}/dishes
+
+### Dishes - Filter by restaurant
+GET {{host}}/dishes?restaurantId=1
+
+### Dishes - Get one
+GET {{host}}/dishes/1
+
+### Dishes - Get non-existent (404)
+GET {{host}}/dishes/99
+
+### Dishes - Create valid
+POST {{host}}/dishes
+Content-Type: application/json
+
+{
+  "name": "Tibs",
+  "priceSantim": 29000,
+  "restaurantId": 1
+}
+
+### Dishes - Create with missing restaurant (404)
+POST {{host}}/dishes
+Content-Type: application/json
+
+{
+  "name": "Test",
+  "priceSantim": 10000,
+  "restaurantId": 99
+}

@@ -1,6 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
+import { DomainErrorFilter } from "./common/filters/domain-error.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,9 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  // Enable global exception filter for domain errors
+  app.useGlobalFilters(new DomainErrorFilter());
 
   // Enable CORS
   app.enableCors();
