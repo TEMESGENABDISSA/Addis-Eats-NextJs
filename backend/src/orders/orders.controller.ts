@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Patch, Delete, Param, Query, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, Get, Post, Patch, Delete, Param, Query, Body, HttpCode, HttpStatus, Header, Res } from "@nestjs/common";
 import { ParseIntPipe } from "@nestjs/common";
+import { Response } from "express";
 import { OrdersService } from "./orders.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateStatusDto } from "./dto/update-status.dto";
@@ -8,11 +9,6 @@ import { FindOrdersQuery } from "./dto/find-orders.query";
 @Controller("orders")
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-
-  @Get("pending")
-  findPending() {
-    return this.ordersService.findPending();
-  }
 
   @Get()
   findAll(@Query() query: FindOrdersQuery) {
@@ -40,7 +36,10 @@ export class OrdersController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() dto: CreateOrderDto) {
-    return this.ordersService.create(dto);
+  @Header("Cache-Control", "no-store")
+  create(@Body() dto: CreateOrderDto, @Res({ passthrough: true }) res: Response) {
+    const order = this.ordersService.create(dto);
+    res.header("Location", `/api/v1/orders/${order.id}`);
+    return order;
   }
 }

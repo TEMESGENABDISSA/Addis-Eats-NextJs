@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Param, Query, Body, HttpCode } from "@nestjs/common";
+import { Controller, Get, Post, Param, Query, Body, HttpCode, Header, Res } from "@nestjs/common";
 import { ParseIntPipe } from "@nestjs/common";
+import { Response } from "express";
 import { DishesService } from "./dishes.service";
 import { CreateDishDto } from "./dto/create-dish.dto";
 
@@ -19,7 +20,10 @@ export class DishesController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() dto: CreateDishDto) {
-    return this.dishes.create(dto);
+  @Header("Cache-Control", "no-store")
+  create(@Body() dto: CreateDishDto, @Res({ passthrough: true }) res: Response) {
+    const dish = this.dishes.create(dto);
+    res.header("Location", `/api/v1/dishes/${dish.id}`);
+    return dish;
   }
 }

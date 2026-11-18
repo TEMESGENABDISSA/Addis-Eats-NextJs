@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Param, Query, Body, HttpCode } from "@nestjs/common";
+import { Controller, Get, Post, Param, Query, Body, HttpCode, Header, Res } from "@nestjs/common";
 import { ParseIntPipe } from "@nestjs/common";
+import { Response } from "express";
 import { RestaurantsService } from "./restaurants.service";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { FindRestaurantsQuery } from "./dto/find-restaurants.query";
@@ -13,11 +14,6 @@ export class RestaurantsController {
     private readonly dishes: DishesService,
     private readonly orders: OrdersService,
   ) {}
-
-  @Get("open")
-  findOpen() {
-    return this.restaurants.findOpen();
-  }
 
   @Get()
   findAll(@Query() query: FindRestaurantsQuery) {
@@ -43,7 +39,10 @@ export class RestaurantsController {
 
   @Post()
   @HttpCode(201)
-  create(@Body() dto: CreateRestaurantDto) {
-    return this.restaurants.create(dto);
+  @Header("Cache-Control", "no-store")
+  create(@Body() dto: CreateRestaurantDto, @Res({ passthrough: true }) res: Response) {
+    const restaurant = this.restaurants.create(dto);
+    res.header("Location", `/api/v1/restaurants/${restaurant.id}`);
+    return restaurant;
   }
 }

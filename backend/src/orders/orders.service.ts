@@ -18,21 +18,19 @@ export class OrdersService {
     if (q.status) rows = rows.filter((o) => o.status === q.status);
     if (q.area) rows = rows.filter((o) => o.area === q.area);
 
-    // Sort (copy first to avoid mutation)
-    rows = [...rows].sort((a, b) =>
-      a[q.sort].localeCompare(b[q.sort]),
-    );
+    // Sort (copy first to avoid mutation, handle descending with leading minus)
+    const sortField = q.sort.startsWith("-") ? q.sort.slice(1) : q.sort;
+    const descending = q.sort.startsWith("-");
+    rows = [...rows].sort((a, b) => {
+      const comparison = a[sortField].localeCompare(b[sortField]);
+      return descending ? -comparison : comparison;
+    });
 
     // Page
     const total = rows.length;
     const items = rows.slice(q.offset, q.offset + q.limit);
 
     return { items, total, limit: q.limit, offset: q.offset };
-  }
-
-  findPending(): Page<Order> {
-    const rows = this.repo.all().filter((o) => o.status === "PENDING");
-    return { items: rows, total: rows.length, limit: rows.length, offset: 0 };
   }
 
   findByRestaurant(restaurantId: number): Page<Order> {

@@ -1,4 +1,4 @@
-import { IsOptional, IsIn, IsInt, Min, Max } from "class-validator";
+import { IsOptional, IsIn, IsInt, Min, Max, Matches } from "class-validator";
 import { Type } from "class-transformer";
 import { Area } from "../order.types";
 import { OrderStatus } from "../order.types";
@@ -26,6 +26,6 @@ export class FindOrdersQuery {
   offset: number = 0;
 
   @IsOptional()
-  @IsIn(["customerName", "status", "area"])
-  sort: "customerName" | "status" | "area" = "customerName";
+  @Matches(/^(-)?(customerName|status|area)$/)
+  sort: string = "customerName";
 }

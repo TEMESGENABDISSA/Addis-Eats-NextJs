@@ -1,4 +1,4 @@
-import { IsOptional, IsIn, IsBoolean, IsInt, Min, Max } from "class-validator";
+import { IsOptional, IsIn, IsBoolean, IsInt, Min, Max, Matches } from "class-validator";
 import { Type } from "class-transformer";
 import { AREAS, Area } from "../restaurant.types";
 
@@ -26,6 +26,6 @@ export class FindRestaurantsQuery {
   offset: number = 0;
 
   @IsOptional()
-  @IsIn(["name", "area"])
-  sort: "name" | "area" = "name";
+  @Matches(/^(-)?(name|area)$/)
+  sort: string = "name";
 }

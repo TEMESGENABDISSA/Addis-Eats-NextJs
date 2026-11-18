@@ -1,4 +1,4 @@
-@host = http://localhost:3001/api
+@host = http://localhost:3001/api/v1
 
 ### Restaurants - List all (Page<T>)
 GET {{host}}/restaurants
@@ -12,11 +12,11 @@ GET {{host}}/restaurants?isOpen=true
 ### Restaurants - Limit and offset
 GET {{host}}/restaurants?limit=2&offset=0
 
-### Restaurants - Sort by name
+### Restaurants - Sort by name (ascending)
 GET {{host}}/restaurants?sort=name
 
-### Restaurants - Get open only
-GET {{host}}/restaurants/open
+### Restaurants - Sort by name (descending)
+GET {{host}}/restaurants?sort=-name
 
 ### Restaurants - Get one
 GET {{host}}/restaurants/1
@@ -24,7 +24,7 @@ GET {{host}}/restaurants/1
 ### Restaurants - Get non-existent (404)
 GET {{host}}/restaurants/99
 
-### Restaurants - Create valid
+### Restaurants - Create valid (201 with Location)
 POST {{host}}/restaurants
 Content-Type: application/json
 
@@ -76,7 +76,7 @@ GET {{host}}/dishes/1
 ### Dishes - Get non-existent (404)
 GET {{host}}/dishes/99
 
-### Dishes - Create valid
+### Dishes - Create valid (201 with Location)
 POST {{host}}/dishes
 Content-Type: application/json
 
@@ -108,8 +108,8 @@ GET {{host}}/orders?area=Bole
 ### Orders - Limit and offset
 GET {{host}}/orders?limit=5&offset=0
 
-### Orders - Get pending only
-GET {{host}}/orders/pending
+### Orders - Sort by customerName (descending)
+GET {{host}}/orders?sort=-customerName
 
 ### Orders - Get one
 GET {{host}}/orders/1
@@ -128,10 +128,13 @@ Content-Type: application/json
 ### Orders - Delete (204)
 DELETE {{host}}/orders/5
 
+### Orders - Delete again (204 - idempotent)
+DELETE {{host}}/orders/5
+
 ### Orders - Delete non-existent (404)
 DELETE {{host}}/orders/99
 
-### Orders - Create valid
+### Orders - Create valid (201 with Location)
 POST {{host}}/orders
 Content-Type: application/json
 
@@ -147,3 +150,6 @@ Content-Type: application/json
     }
   ]
 }
+
+### Unversioned path should return 404
+GET http://localhost:3001/api/restaurants

@@ -1,5 +1,5 @@
 import { NestFactory } from "@nestjs/core";
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { AppModule } from "./app.module";
 import { DomainErrorFilter } from "./common/filters/domain-error.filter";
 
@@ -8,6 +8,12 @@ async function bootstrap() {
 
   // Set global prefix for all routes
   app.setGlobalPrefix("api");
+
+  // Enable URI versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: "1",
+  });
 
   // Enable global validation pipe
   app.useGlobalPipes(
