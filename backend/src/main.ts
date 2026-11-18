@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe, VersioningType } from "@nestjs/common";
 import { AppModule } from "./app.module";
-import { DomainErrorFilter } from "./common/filters/domain-error.filter";
+import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,11 +21,16 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      transformOptions: {
+        enableImplicitConversion: false,
+      },
+      stopAtFirstError: false,
+      disableErrorMessages: false,
     }),
   );
 
-  // Enable global exception filter for domain errors
-  app.useGlobalFilters(new DomainErrorFilter());
+  // Enable global exception filter for all errors
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // Enable CORS
   app.enableCors();

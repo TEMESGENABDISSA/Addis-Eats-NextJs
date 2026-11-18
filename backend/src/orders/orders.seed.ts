@@ -7,7 +7,7 @@ export const SEED: Order[] = [
     area: "Bole",
     status: "PENDING",
     restaurantId: 1,
-    dishes: [{ name: "Doro Wat", priceSantim: 32000 }],
+    lines: [{ dishId: 1, quantity: 1 }],
     totalSantim: 32000,
   },
   {
@@ -16,7 +16,7 @@ export const SEED: Order[] = [
     area: "Bole",
     status: "PREPARING",
     restaurantId: 2,
-    dishes: [{ name: "Kitfo", priceSantim: 35000 }],
+    lines: [{ dishId: 3, quantity: 1 }],
     totalSantim: 35000,
   },
   {
@@ -25,7 +25,7 @@ export const SEED: Order[] = [
     area: "Kazanchis",
     status: "ON_THE_WAY",
     restaurantId: 3,
-    dishes: [{ name: "Firfir", priceSantim: 16000 }],
+    lines: [{ dishId: 5, quantity: 1 }],
     totalSantim: 16000,
   },
   {
@@ -34,7 +34,7 @@ export const SEED: Order[] = [
     area: "Piassa",
     status: "DELIVERED",
     restaurantId: 4,
-    dishes: [{ name: "Kik Alicha", priceSantim: 14000 }],
+    lines: [{ dishId: 7, quantity: 1 }],
     totalSantim: 14000,
   },
   {
@@ -43,7 +43,7 @@ export const SEED: Order[] = [
     area: "Megenagna",
     status: "CANCELLED",
     restaurantId: 1,
-    dishes: [{ name: "Shiro", priceSantim: 18000 }],
+    lines: [{ dishId: 2, quantity: 1 }],
     totalSantim: 18000,
   },
   {
@@ -52,7 +52,7 @@ export const SEED: Order[] = [
     area: "Bole",
     status: "PENDING",
     restaurantId: 1,
-    dishes: [{ name: "Gomen", priceSantim: 15000 }],
+    lines: [{ dishId: 4, quantity: 1 }],
     totalSantim: 15000,
   },
   {
@@ -61,7 +61,7 @@ export const SEED: Order[] = [
     area: "Kazanchis",
     status: "PREPARING",
     restaurantId: 2,
-    dishes: [{ name: "Tibs", priceSantim: 29000 }],
+    lines: [{ dishId: 6, quantity: 1 }],
     totalSantim: 29000,
   },
   {
@@ -70,7 +70,7 @@ export const SEED: Order[] = [
     area: "Piassa",
     status: "ON_THE_WAY",
     restaurantId: 3,
-    dishes: [{ name: "Misir Wat", priceSantim: 17000 }],
+    lines: [{ dishId: 8, quantity: 1 }],
     totalSantim: 17000,
   },
   {
@@ -79,7 +79,7 @@ export const SEED: Order[] = [
     area: "Megenagna",
     status: "DELIVERED",
     restaurantId: 4,
-    dishes: [{ name: "Doro Wat", priceSantim: 32000 }],
+    lines: [{ dishId: 1, quantity: 1 }],
     totalSantim: 32000,
   },
   {
@@ -88,7 +88,7 @@ export const SEED: Order[] = [
     area: "Bole",
     status: "CANCELLED",
     restaurantId: 2,
-    dishes: [{ name: "Kitfo", priceSantim: 35000 }],
+    lines: [{ dishId: 3, quantity: 1 }],
     totalSantim: 35000,
   },
   {
@@ -97,7 +97,7 @@ export const SEED: Order[] = [
     area: "Kazanchis",
     status: "PENDING",
     restaurantId: 1,
-    dishes: [{ name: "Shiro", priceSantim: 18000 }],
+    lines: [{ dishId: 2, quantity: 1 }],
     totalSantim: 18000,
   },
   {
@@ -106,7 +106,7 @@ export const SEED: Order[] = [
     area: "Piassa",
     status: "PREPARING",
     restaurantId: 4,
-    dishes: [{ name: "Kik Alicha", priceSantim: 14000 }],
+    lines: [{ dishId: 7, quantity: 1 }],
     totalSantim: 14000,
   },
   {
@@ -115,7 +115,7 @@ export const SEED: Order[] = [
     area: "Megenagna",
     status: "ON_THE_WAY",
     restaurantId: 1,
-    dishes: [{ name: "Gomen", priceSantim: 15000 }],
+    lines: [{ dishId: 4, quantity: 1 }],
     totalSantim: 15000,
   },
   {
@@ -124,7 +124,7 @@ export const SEED: Order[] = [
     area: "Bole",
     status: "DELIVERED",
     restaurantId: 3,
-    dishes: [{ name: "Firfir", priceSantim: 16000 }],
+    lines: [{ dishId: 5, quantity: 1 }],
     totalSantim: 16000,
   },
 ];

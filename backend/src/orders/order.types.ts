@@ -10,9 +10,9 @@ export type OrderStatus =
   | "DELIVERED"
   | "CANCELLED";
 
-export interface Dish {
-  name: string;
-  priceSantim: number;
+export interface OrderLine {
+  dishId: number;
+  quantity: number;
 }
 
 export interface Order {
@@ -21,7 +21,7 @@ export interface Order {
   area: Area;
   status: OrderStatus;
   restaurantId: number;
-  dishes: Dish[];
+  lines: OrderLine[];
   telebirrPhone?: string;
   totalSantim: number;
 }

@@ -1,8 +1,23 @@
-import { IsString, IsInt, Min, IsIn, Matches, IsOptional, IsArray } from "class-validator";
+import {
+  IsString,
+  IsInt,
+  Min,
+  IsIn,
+  IsOptional,
+  IsArray,
+  ArrayNotEmpty,
+  ValidateNested,
+} from "class-validator";
+import { Type } from "class-transformer";
 import { Area } from "../order.types";
+import { OrderLineDto } from "./order-line.dto";
+import { IsTeleBirrNumber } from "../../common/validators/is-telebirr-number.validator";
+import { IsSantim } from "../../common/validators/is-santim.validator";
+import { LargeOrderRequiresPhone } from "./large-order-requires-phone.validator";
 
 export class CreateOrderDto {
   @IsString()
+  @Min(2)
   customerName!: string;
 
   @IsIn(["Bole", "Kazanchis", "Piassa", "Megenagna"])
@@ -12,16 +27,17 @@ export class CreateOrderDto {
   @Min(1)
   restaurantId!: number;
 
-  @IsInt()
-  @Min(1)
+  @IsSantim()
   totalSantim!: number;
 
   @IsOptional()
-  @Matches(/^(?:\+251|0)9\d{8}$/, {
-    message: "phone must be a valid TeleBirr number",
-  })
+  @IsTeleBirrNumber()
+  @LargeOrderRequiresPhone()
   telebirrPhone?: string;
 
   @IsArray()
-  dishes!: Array<{ name: string; priceSantim: number }>;
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => OrderLineDto)
+  lines!: OrderLineDto[];
 }

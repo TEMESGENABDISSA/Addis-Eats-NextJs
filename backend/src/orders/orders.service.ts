@@ -1,9 +1,21 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Order, Area, OrderStatus } from "./order.types";
-import { OrderNotFoundError } from "./order.errors";
+import { OrderNotFoundError, InvalidTransitionError } from "./order.errors";
 import { OrderRepository, ORDER_REPOSITORY } from "./order.repository";
 import { FindOrdersQuery } from "./dto/find-orders.query";
 import { Page } from "../common/page";
+
+// Status transition table - defines allowed state changes
+const ALLOWED_TRANSITIONS: Record<
+  OrderStatus,
+  readonly OrderStatus[]
+> = {
+  PENDING: ["PREPARING", "CANCELLED"],
+  PREPARING: ["ON_THE_WAY", "CANCELLED"],
+  ON_THE_WAY: ["DELIVERED"],
+  DELIVERED: [], // terminal
+  CANCELLED: [], // terminal
+};
 
 @Injectable()
 export class OrdersService {
@@ -47,7 +59,14 @@ export class OrdersService {
   }
 
   updateStatus(id: number, status: OrderStatus): Order {
-    const order = this.findOne(id);
+    const order = this.findOne(id); // throws 404 if not found
+
+    // Check if transition is allowed
+    const allowed = ALLOWED_TRANSITIONS[order.status];
+    if (!allowed.includes(status)) {
+      throw new InvalidTransitionError(order.status, status);
+    }
+
     const updated = { ...order, status };
     return this.repo.save(updated);
   }

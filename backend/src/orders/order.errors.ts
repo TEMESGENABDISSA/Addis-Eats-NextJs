@@ -7,6 +7,18 @@ export class OrderNotFoundError extends Error {
   }
 }
 
+export class InvalidTransitionError extends Error {
+  constructor(
+    public readonly currentStatus: string,
+    public readonly targetStatus: string,
+  ) {
+    super(
+      `Cannot transition order from ${currentStatus} to ${targetStatus}`,
+    );
+    this.name = "InvalidTransitionError";
+  }
+}
+
 export class PaymentDeclinedError extends Error {
   constructor(
     public readonly phone: string,

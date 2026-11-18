@@ -46,9 +46,9 @@ The object itself (not wrapped)
 ```typescript
 {
   statusCode: number;
-  error: string;
   message: string;
   path: string;
+  timestamp: string;
   requestId?: string;
 }
 ```

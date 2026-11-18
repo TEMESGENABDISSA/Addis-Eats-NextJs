@@ -143,12 +143,118 @@ Content-Type: application/json
   "area": "Bole",
   "restaurantId": 1,
   "totalSantim": 32000,
-  "dishes": [
+  "lines": [
     {
-      "name": "Doro Wat",
-      "priceSantim": 32000
+      "dishId": 1,
+      "quantity": 1
     }
   ]
+}
+
+### Orders - Invalid TeleBirr phone (400)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 32000,
+  "telebirrPhone": "0812345678",
+  "lines": [
+    {
+      "dishId": 1,
+      "quantity": 1
+    }
+  ]
+}
+
+### Orders - Non-integer santim (400)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 240.5,
+  "lines": [
+    {
+      "dishId": 1,
+      "quantity": 1
+    }
+  ]
+}
+
+### Orders - Negative santim (400)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": -100,
+  "lines": [
+    {
+      "dishId": 1,
+      "quantity": 1
+    }
+  ]
+}
+
+### Orders - Empty lines array (400)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 32000,
+  "lines": []
+}
+
+### Orders - Line missing dishId (400)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 32000,
+  "lines": [
+    {
+      "quantity": 2
+    }
+  ]
+}
+
+### Orders - Unknown field (400 - forbidNonWhitelisted)
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 32000,
+  "lines": [
+    {
+      "dishId": 1,
+      "quantity": 1
+    }
+  ],
+  "isAdmin": true
+}
+
+### Orders - Invalid status transition (409)
+PATCH {{host}}/orders/4/status
+Content-Type: application/json
+
+{
+  "status": "PENDING"
 }
 
 ### Unversioned path should return 404
