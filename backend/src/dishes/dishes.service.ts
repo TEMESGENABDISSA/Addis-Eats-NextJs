@@ -4,6 +4,7 @@ import { DishNotFoundError, RestaurantNotFoundError } from "./dishes.errors";
 import { DishRepository, DISH_REPOSITORY } from "./dishes.repository";
 import { RestaurantRepository, RESTAURANT_REPOSITORY } from "../restaurants/restaurants.repository";
 import { CreateDishDto } from "./dto/create-dish.dto";
+import { Page } from "../common/page";
 
 @Injectable()
 export class DishesService {
@@ -12,12 +13,17 @@ export class DishesService {
     @Inject(RESTAURANT_REPOSITORY) private readonly restaurantRepo: RestaurantRepository,
   ) {}
 
-  findAll(restaurantId?: number): Dish[] {
-    const dishes = this.dishRepo.all();
+  findAll(restaurantId?: number): Page<Dish> {
+    let dishes = this.dishRepo.all();
     if (restaurantId) {
-      return dishes.filter((d) => d.restaurantId === restaurantId);
+      dishes = dishes.filter((d) => d.restaurantId === restaurantId);
     }
-    return dishes;
+    return { items: dishes, total: dishes.length, limit: dishes.length, offset: 0 };
+  }
+
+  findByRestaurant(restaurantId: number): Page<Dish> {
+    const dishes = this.dishRepo.all().filter((d) => d.restaurantId === restaurantId);
+    return { items: dishes, total: dishes.length, limit: dishes.length, offset: 0 };
   }
 
   findOne(id: number): Dish {

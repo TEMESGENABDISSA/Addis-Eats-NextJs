@@ -17,5 +17,6 @@ import { InMemoryRestaurantRepository, RESTAURANT_REPOSITORY } from "../restaura
       useClass: InMemoryRestaurantRepository,
     },
   ],
+  exports: [DishesService],
 })
 export class DishesModule {}

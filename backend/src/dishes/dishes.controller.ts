@@ -8,7 +8,7 @@ export class DishesController {
   constructor(private readonly dishes: DishesService) {}
 
   @Get()
-  findAll(@Query("restaurantId") restaurantId?: number) {
+  findAll(@Query("restaurantId", ParseIntPipe) restaurantId?: number) {
     return this.dishes.findAll(restaurantId);
   }
 

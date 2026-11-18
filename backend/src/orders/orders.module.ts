@@ -12,5 +12,6 @@ import { InMemoryOrderRepository, ORDER_REPOSITORY } from "./order.repository";
       useClass: InMemoryOrderRepository,
     },
   ],
+  exports: [OrdersService],
 })
 export class OrdersModule {}

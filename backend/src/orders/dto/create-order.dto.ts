@@ -10,6 +10,10 @@ export class CreateOrderDto {
 
   @IsInt()
   @Min(1)
+  restaurantId!: number;
+
+  @IsInt()
+  @Min(1)
   totalSantim!: number;
 
   @IsOptional()

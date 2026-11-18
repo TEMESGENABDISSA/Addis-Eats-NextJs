@@ -1,10 +1,19 @@
 @host = http://localhost:3001/api
 
-### Restaurants - List all
+### Restaurants - List all (Page<T>)
 GET {{host}}/restaurants
 
 ### Restaurants - Filter by area
 GET {{host}}/restaurants?area=Bole
+
+### Restaurants - Filter by isOpen
+GET {{host}}/restaurants?isOpen=true
+
+### Restaurants - Limit and offset
+GET {{host}}/restaurants?limit=2&offset=0
+
+### Restaurants - Sort by name
+GET {{host}}/restaurants?sort=name
 
 ### Restaurants - Get open only
 GET {{host}}/restaurants/open
@@ -43,7 +52,19 @@ Content-Type: application/json
   "hacked": true
 }
 
-### Dishes - List all
+### Restaurants - Get dishes for restaurant
+GET {{host}}/restaurants/1/dishes
+
+### Restaurants - Get dishes for non-existent restaurant (404)
+GET {{host}}/restaurants/99/dishes
+
+### Restaurants - Get orders for restaurant
+GET {{host}}/restaurants/1/orders
+
+### Restaurants - Get orders for non-existent restaurant (404)
+GET {{host}}/restaurants/99/orders
+
+### Dishes - List all (Page<T>)
 GET {{host}}/dishes
 
 ### Dishes - Filter by restaurant
@@ -73,4 +94,56 @@ Content-Type: application/json
   "name": "Test",
   "priceSantim": 10000,
   "restaurantId": 99
+}
+
+### Orders - List all (Page<T>)
+GET {{host}}/orders
+
+### Orders - Filter by status
+GET {{host}}/orders?status=PENDING
+
+### Orders - Filter by area
+GET {{host}}/orders?area=Bole
+
+### Orders - Limit and offset
+GET {{host}}/orders?limit=5&offset=0
+
+### Orders - Get pending only
+GET {{host}}/orders/pending
+
+### Orders - Get one
+GET {{host}}/orders/1
+
+### Orders - Get non-existent (404)
+GET {{host}}/orders/99
+
+### Orders - Update status
+PATCH {{host}}/orders/1/status
+Content-Type: application/json
+
+{
+  "status": "PREPARING"
+}
+
+### Orders - Delete (204)
+DELETE {{host}}/orders/5
+
+### Orders - Delete non-existent (404)
+DELETE {{host}}/orders/99
+
+### Orders - Create valid
+POST {{host}}/orders
+Content-Type: application/json
+
+{
+  "customerName": "Test Customer",
+  "area": "Bole",
+  "restaurantId": 1,
+  "totalSantim": 32000,
+  "dishes": [
+    {
+      "name": "Doro Wat",
+      "priceSantim": 32000
+    }
+  ]
 }

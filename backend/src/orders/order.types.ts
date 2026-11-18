@@ -20,6 +20,7 @@ export interface Order {
   customerName: string;
   area: Area;
   status: OrderStatus;
+  restaurantId: number;
   dishes: Dish[];
   telebirrPhone?: string;
   totalSantim: number;
