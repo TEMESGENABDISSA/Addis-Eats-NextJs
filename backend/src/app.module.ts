@@ -5,8 +5,9 @@ import { LoggerModule } from "nestjs-pino";
 import { OrdersModule } from "./orders/orders.module";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { DishesModule } from "./dishes/dishes.module";
+import { AuthModule } from "./auth/auth.module";
 import { RequestIdMiddleware } from "./common/middleware/request-id.middleware";
-import { ApiKeyGuard } from "./common/guards/api-key.guard";
+import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { RolesGuard } from "./common/guards/roles.guard";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { TimeoutInterceptor } from "./common/interceptors/timeout.interceptor";
@@ -25,6 +26,8 @@ import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
             "req.headers['x-api-key']",
             "req.body.password",
             "*.phone",
+            "*.accessToken",
+            "*.refreshToken",
           ],
           censor: "[redacted]",
         },
@@ -33,12 +36,13 @@ import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
           : undefined,
       },
     }),
+    AuthModule,
     OrdersModule,
     RestaurantsModule,
     DishesModule,
   ],
   providers: [
-    { provide: APP_GUARD, useClass: ApiKeyGuard },
+    { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },

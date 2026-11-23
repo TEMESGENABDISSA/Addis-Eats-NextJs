@@ -43,7 +43,8 @@ async function bootstrap() {
     .addTag("restaurants", "Kitchens that take orders")
     .addTag("dishes", "Items on a restaurant menu")
     .addTag("orders", "Customer orders and their status")
-    .addApiKey({ type: "apiKey", name: "x-api-key", in: "header" })
+    .addTag("auth", "Authentication endpoints")
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

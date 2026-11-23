@@ -7,6 +7,7 @@ import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { FindRestaurantsQuery } from "./dto/find-restaurants.query";
 import { DishesService } from "../dishes/dishes.service";
 import { OrdersService } from "../orders/orders.service";
+import { Public } from "../common/decorators/public.decorator";
 
 @ApiTags("restaurants")
 @Controller("restaurants")
@@ -17,6 +18,7 @@ export class RestaurantsController {
     private readonly orders: OrdersService,
   ) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: "List restaurants with filtering, sorting, and pagination" })
   @ApiResponse({ status: 200, description: "Returns paginated list of restaurants" })
@@ -24,6 +26,7 @@ export class RestaurantsController {
     return this.restaurants.findAll(query);
   }
 
+  @Public()
   @Get(":id")
   @ApiOperation({ summary: "Get a restaurant by ID" })
   @ApiResponse({ status: 200, description: "Restaurant found" })
@@ -32,6 +35,7 @@ export class RestaurantsController {
     return this.restaurants.findOne(id);
   }
 
+  @Public()
   @Get(":id/dishes")
   @ApiOperation({ summary: "Get dishes for a specific restaurant" })
   @ApiResponse({ status: 200, description: "Returns dishes for the restaurant" })

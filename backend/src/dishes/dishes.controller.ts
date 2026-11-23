@@ -4,12 +4,14 @@ import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { Response } from "express";
 import { DishesService } from "./dishes.service";
 import { CreateDishDto } from "./dto/create-dish.dto";
+import { Public } from "../common/decorators/public.decorator";
 
 @ApiTags("dishes")
 @Controller("dishes")
 export class DishesController {
   constructor(private readonly dishes: DishesService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: "List dishes, optionally filtered by restaurant" })
   @ApiResponse({ status: 200, description: "Returns paginated list of dishes" })
@@ -17,6 +19,7 @@ export class DishesController {
     return this.dishes.findAll(restaurantId);
   }
 
+  @Public()
   @Get(":id")
   @ApiOperation({ summary: "Get a dish by ID" })
   @ApiResponse({ status: 200, description: "Dish found" })

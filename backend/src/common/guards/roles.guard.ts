@@ -18,8 +18,7 @@ export class RolesGuard implements CanActivate {
 
     const { user } = context.switchToHttp().getRequest();
 
-    // Temporarily allow all requests until JWT authentication is implemented
-    // In week 12, this will check: return requiredRoles.some((role) => user?.roles?.includes(role));
-    return true;
+    // Check if user has required roles
+    return requiredRoles.some((role) => user?.roles?.includes(role));
   }
 }
