@@ -5,6 +5,7 @@ import { OrdersService } from "./orders.service";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateStatusDto } from "./dto/update-status.dto";
 import { FindOrdersQuery } from "./dto/find-orders.query";
+import { Roles } from "../common/decorators/roles.decorator";
 
 @Controller("orders")
 export class OrdersController {
@@ -30,6 +31,7 @@ export class OrdersController {
 
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles("staff")
   cancel(@Param("id", ParseIntPipe) id: number): void {
     this.ordersService.cancel(id);
   }

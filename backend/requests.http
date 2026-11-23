@@ -257,5 +257,21 @@ Content-Type: application/json
   "status": "PENDING"
 }
 
+### Day 59 - RequestId middleware test (should return x-request-id header)
+GET {{host}}/restaurants
+
+### Day 59 - RequestId with custom id (should echo the sent id)
+GET {{host}}/restaurants
+x-request-id: my-custom-id-123
+
+### Day 59 - ParseAreaPipe - lowercase area (should normalize to "Bole")
+GET {{host}}/restaurants?area=bole
+
+### Day 59 - ParseAreaPipe - uppercase area (should normalize to "Bole")
+GET {{host}}/restaurants?area=BOLE
+
+### Day 59 - ParseAreaPipe - invalid area (400)
+GET {{host}}/restaurants?area=adama
+
 ### Unversioned path should return 404
 GET http://localhost:3001/api/restaurants
