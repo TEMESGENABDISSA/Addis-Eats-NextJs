@@ -3,6 +3,7 @@ import { Order } from "./order.types";
 export const SEED: Order[] = [
   {
     id: 1,
+    customerId: 2, // customer
     customerName: "Abebe",
     area: "Bole",
     status: "PENDING",
@@ -12,6 +13,7 @@ export const SEED: Order[] = [
   },
   {
     id: 2,
+    customerId: 2, // customer
     customerName: "Kebede",
     area: "Bole",
     status: "PREPARING",
@@ -21,6 +23,8 @@ export const SEED: Order[] = [
   },
   {
     id: 3,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Almaz",
     area: "Kazanchis",
     status: "ON_THE_WAY",
@@ -30,6 +34,8 @@ export const SEED: Order[] = [
   },
   {
     id: 4,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Dawit",
     area: "Piassa",
     status: "DELIVERED",
@@ -39,6 +45,7 @@ export const SEED: Order[] = [
   },
   {
     id: 5,
+    customerId: 2, // customer
     customerName: "Hanna",
     area: "Megenagna",
     status: "CANCELLED",
@@ -48,6 +55,7 @@ export const SEED: Order[] = [
   },
   {
     id: 6,
+    customerId: 2, // customer
     customerName: "Mikael",
     area: "Bole",
     status: "PENDING",
@@ -57,6 +65,7 @@ export const SEED: Order[] = [
   },
   {
     id: 7,
+    customerId: 2, // customer
     customerName: "Sara",
     area: "Kazanchis",
     status: "PREPARING",
@@ -66,6 +75,8 @@ export const SEED: Order[] = [
   },
   {
     id: 8,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Yosef",
     area: "Piassa",
     status: "ON_THE_WAY",
@@ -75,6 +86,8 @@ export const SEED: Order[] = [
   },
   {
     id: 9,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Rahel",
     area: "Megenagna",
     status: "DELIVERED",
@@ -84,6 +97,7 @@ export const SEED: Order[] = [
   },
   {
     id: 10,
+    customerId: 2, // customer
     customerName: "Tewodros",
     area: "Bole",
     status: "CANCELLED",
@@ -93,6 +107,7 @@ export const SEED: Order[] = [
   },
   {
     id: 11,
+    customerId: 2, // customer
     customerName: "Birtukan",
     area: "Kazanchis",
     status: "PENDING",
@@ -102,6 +117,7 @@ export const SEED: Order[] = [
   },
   {
     id: 12,
+    customerId: 2, // customer
     customerName: "Kaleb",
     area: "Piassa",
     status: "PREPARING",
@@ -111,6 +127,8 @@ export const SEED: Order[] = [
   },
   {
     id: 13,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Meron",
     area: "Megenagna",
     status: "ON_THE_WAY",
@@ -120,6 +138,8 @@ export const SEED: Order[] = [
   },
   {
     id: 14,
+    customerId: 2, // customer
+    courierId: 3, // courier
     customerName: "Natan",
     area: "Bole",
     status: "DELIVERED",

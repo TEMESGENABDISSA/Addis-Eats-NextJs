@@ -9,6 +9,8 @@ import { AuthModule } from "./auth/auth.module";
 import { RequestIdMiddleware } from "./common/middleware/request-id.middleware";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { RolesGuard } from "./common/guards/roles.guard";
+import { OrderPolicyGuard } from "./common/guards/order-policy.guard";
+import { OrderPolicy } from "./common/policies/order.policy";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { TimeoutInterceptor } from "./common/interceptors/timeout.interceptor";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
@@ -44,6 +46,8 @@ import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
   providers: [
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
+    { provide: APP_GUARD, useClass: OrderPolicyGuard },
+    OrderPolicy,
     { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor },
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
     { provide: APP_FILTER, useClass: AllExceptionsFilter },

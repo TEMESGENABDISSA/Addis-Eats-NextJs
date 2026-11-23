@@ -45,7 +45,7 @@ export class InMemoryUserRepository implements UserRepository {
   }
 
   private seed(): void {
-    // Seed with a staff user for testing
+    // Seed with users for all roles
     const staffUser: User = {
       id: this.nextId++,
       email: "staff@addiseats.et",
@@ -53,5 +53,30 @@ export class InMemoryUserRepository implements UserRepository {
       roles: ["staff"],
     };
     this.users.set(staffUser.id, staffUser);
+
+    const customerUser: User = {
+      id: this.nextId++,
+      email: "customer@addiseats.et",
+      passwordHash: "$argon2id$v=19$m=65536,t=3,p=2$someHashForTesting",
+      roles: ["customer"],
+    };
+    this.users.set(customerUser.id, customerUser);
+
+    const courierUser: User = {
+      id: this.nextId++,
+      email: "courier@addiseats.et",
+      passwordHash: "$argon2id$v=19$m=65536,t=3,p=2$someHashForTesting",
+      roles: ["courier"],
+    };
+    this.users.set(courierUser.id, courierUser);
+
+    const restaurantUser: User = {
+      id: this.nextId++,
+      email: "restaurant@addiseats.et",
+      passwordHash: "$argon2id$v=19$m=65536,t=3,p=2$someHashForTesting",
+      roles: ["restaurant"],
+      restaurantId: 1,
+    };
+    this.users.set(restaurantUser.id, restaurantUser);
   }
 }

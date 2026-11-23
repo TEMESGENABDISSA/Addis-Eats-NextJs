@@ -25,8 +25,13 @@ export class OrdersService {
     @InjectPinoLogger() private readonly logger: PinoLogger,
   ) {}
 
-  findAll(q: FindOrdersQuery): Page<Order> {
+  findAll(q: FindOrdersQuery, userId?: number, userRoles?: string[]): Page<Order> {
     let rows = this.repo.all();
+
+    // Filter by user ID if provided and not staff
+    if (userId && !userRoles?.includes("staff")) {
+      rows = rows.filter((o) => o.customerId === userId);
+    }
 
     // Filter
     if (q.status) rows = rows.filter((o) => o.status === q.status);

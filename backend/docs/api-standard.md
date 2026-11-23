@@ -78,10 +78,25 @@ The following query parameter names are reserved for API controls and cannot be 
 - **201 Created**: Resource created (with `Location` header)
 - **204 No Content**: Successful delete (no body)
 - **400 Bad Request**: Malformed request or validation failure
-- **404 Not Found**: Resource does not exist
+- **403 Forbidden**: Caller is authenticated but not authorized for this action on a resource they can see
+- **404 Not Found**: Resource does not exist OR caller is not authorized to see this resource (existence is secret)
 - **409 Conflict**: Valid but clashes (e.g., cancelling delivered order)
 - **422 Unprocessable Entity**: Well-formed but semantically invalid
 - **500 Internal Server Error**: Server error (never on purpose)
+
+## Authorization & 403 vs 404
+
+This API uses the following rule for authorization failures:
+
+- **404 Not Found**: When a caller has no right to see a resource (existence itself is information)
+  - Example: A customer requesting another customer's order
+  - Example: A customer requesting an order that doesn't exist (same response to prevent enumeration)
+  
+- **403 Forbidden**: When a caller can see a resource but cannot perform an action on it
+  - Example: A courier trying to delete an order they are assigned to deliver
+  - Example: A customer trying to cancel an order that is already ON_THE_WAY
+
+**Rationale**: 403 allows enumeration (iterating IDs to discover what exists). 404 hides existence. The truth is logged server-side for debugging.
 
 ## HTTP Headers
 

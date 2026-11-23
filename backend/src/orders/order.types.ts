@@ -17,6 +17,8 @@ export interface OrderLine {
 
 export interface Order {
   readonly id: number;
+  customerId: number; // User who placed the order
+  courierId?: number; // Courier assigned to deliver
   customerName: string;
   area: Area;
   status: OrderStatus;
