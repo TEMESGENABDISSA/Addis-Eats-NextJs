@@ -3,8 +3,8 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  Logger,
 } from "@nestjs/common";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Request, Response } from "express";
 import { OrderNotFoundError } from "../../orders/order.errors";
 import { InvalidTransitionError } from "../../orders/order.errors";
@@ -13,7 +13,7 @@ import { DishNotFoundError } from "../../dishes/dishes.errors";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  private readonly logger = new Logger(AllExceptionsFilter.name);
+  constructor(@InjectPinoLogger() private readonly logger: PinoLogger) {}
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -24,7 +24,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     // Log server errors (5xx) only
     if (status >= 500) {
-      this.logger.error(exception);
+      this.logger.error(exception, "Unhandled exception");
     }
 
     res.status(status).json({

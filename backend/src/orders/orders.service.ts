@@ -1,4 +1,5 @@
 import { Injectable, Inject } from "@nestjs/common";
+import { InjectPinoLogger, PinoLogger } from "nestjs-pino";
 import { Order, Area, OrderStatus } from "./order.types";
 import { OrderNotFoundError, InvalidTransitionError } from "./order.errors";
 import { OrderRepository, ORDER_REPOSITORY } from "./order.repository";
@@ -21,6 +22,7 @@ const ALLOWED_TRANSITIONS: Record<
 export class OrdersService {
   constructor(
     @Inject(ORDER_REPOSITORY) private readonly repo: OrderRepository,
+    @InjectPinoLogger() private readonly logger: PinoLogger,
   ) {}
 
   findAll(q: FindOrdersQuery): Page<Order> {
@@ -91,6 +93,8 @@ export class OrdersService {
       id: 0, // Will be assigned by repository
       status: "PENDING",
     };
-    return this.repo.save(order);
+    const saved = this.repo.save(order);
+    this.logger.info({ orderId: saved.id, area: saved.area }, "Order created");
+    return saved;
   }
 }
